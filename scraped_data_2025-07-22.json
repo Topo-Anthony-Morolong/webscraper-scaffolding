@@ -1,0 +1,131 @@
+{
+  "mainUrl": "https://www.perplexity.ai/",
+  "timestamp": "2025-07-22T09:40:26.842Z",
+  "links": [
+    "https://www.perplexity.ai/finance",
+    "https://www.perplexity.ai/travel",
+    "https://www.perplexity.ai/academic",
+    "https://www.perplexity.ai/library",
+    "https://www.perplexity.ai/",
+    "https://www.perplexity.ai/discover/",
+    "https://www.perplexity.ai/spaces/templates/"
+  ],
+  "images": [
+    {
+      "url": "https://www.perplexity.ai/finance",
+      "images": [
+        "https://www.perplexity.ai/favicon.ico"
+      ],
+      "count": 1
+    },
+    {
+      "url": "https://www.perplexity.ai/travel",
+      "images": [
+        "https://www.perplexity.ai/favicon.ico"
+      ],
+      "count": 1
+    },
+    {
+      "url": "https://www.perplexity.ai/academic",
+      "images": [
+        "https://www.perplexity.ai/favicon.ico"
+      ],
+      "count": 1
+    },
+    {
+      "url": "https://www.perplexity.ai/library",
+      "images": [
+        "https://www.perplexity.ai/favicon.ico"
+      ],
+      "count": 1
+    },
+    {
+      "url": "https://www.perplexity.ai/",
+      "images": [
+        "https://www.perplexity.ai/favicon.ico"
+      ],
+      "count": 1
+    },
+    {
+      "url": "https://www.perplexity.ai/discover/",
+      "images": [
+        "https://www.perplexity.ai/favicon.ico"
+      ],
+      "count": 1
+    },
+    {
+      "url": "https://www.perplexity.ai/spaces/templates/",
+      "images": [
+        "https://www.perplexity.ai/favicon.ico"
+      ],
+      "count": 1
+    }
+  ],
+  "emails": [],
+  "businessInfo": [
+    {
+      "url": "https://www.perplexity.ai/",
+      "name": "Perplexity",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "website": ""
+    },
+    {
+      "url": "https://www.perplexity.ai/finance",
+      "name": "www.perplexity.ai",
+      "phone": "1753177229",
+      "email": "",
+      "address": "",
+      "website": "https://www.cloudflare.com?utm_source=challenge&utm_campaign=m"
+    },
+    {
+      "url": "https://www.perplexity.ai/travel",
+      "name": "www.perplexity.ai",
+      "phone": "1753177234",
+      "email": "",
+      "address": "",
+      "website": "https://www.cloudflare.com?utm_source=challenge&utm_campaign=m"
+    },
+    {
+      "url": "https://www.perplexity.ai/academic",
+      "name": "www.perplexity.ai",
+      "phone": "1753177238",
+      "email": "",
+      "address": "",
+      "website": "https://www.cloudflare.com?utm_source=challenge&utm_campaign=m"
+    },
+    {
+      "url": "https://www.perplexity.ai/library",
+      "name": "www.perplexity.ai",
+      "phone": "1753177241",
+      "email": "",
+      "address": "",
+      "website": "https://www.cloudflare.com?utm_source=challenge&utm_campaign=m"
+    },
+    {
+      "url": "https://www.perplexity.ai/",
+      "name": "www.perplexity.ai",
+      "phone": "1753177244",
+      "email": "",
+      "address": "",
+      "website": "https://www.cloudflare.com?utm_source=challenge&utm_campaign=m"
+    },
+    {
+      "url": "https://www.perplexity.ai/discover/",
+      "name": "www.perplexity.ai",
+      "phone": "1753177247",
+      "email": "",
+      "address": "",
+      "website": "https://www.cloudflare.com?utm_source=challenge&utm_campaign=m"
+    },
+    {
+      "url": "https://www.perplexity.ai/spaces/templates/",
+      "name": "www.perplexity.ai",
+      "phone": "1753177252",
+      "email": "",
+      "address": "",
+      "website": "https://www.cloudflare.com?utm_source=challenge&utm_campaign=m"
+    }
+  ]
+}
