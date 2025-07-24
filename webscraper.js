@@ -1,78 +1,62 @@
-import fetch from "node-fetch";
-import * as cheerio from "cheerio";
-import puppeteer from "puppeteer";
+
+import { scrapeHtml } from './scrape-Html.js';
+import { scrapeLinks } from './scrape-links.js';  
+import { scrapeImages } from './scrape-images.js';
+
+const args = process.argv.slice(2);
+const url = args[0];
+const option = args[1];
+
+if (!url || !option) {
+  console.error('Usage: node webscraper.js <URL> <--option>');
+  process.exit(1);
+}
+
 
 async function scrapeWebsite() {
-  try {
-    const url = "https://www.apple.com/";
+   
+  switch (option) {
+    
+    case '--html':
+      console.log(`Scraping HTML from: ${url}`);
+      await scrapeHtml(url);
+      break;
+    case '--links': 
+      console.log(`Scraping Links from: ${url}`);
+      console.log(await scrapeLinks(url));
+        break;
+    case '--images':
+      console.log(`Scraping Images from: ${url}`);
+      await scrapeImages(url);
+      break;  
+    case '--emails':
+      //call the scrapeEmails function
+      break;
+    case '--games':
+      //call the scrapeGames function
+      break;  
+    default:
+       console.error(`
+ option: ${option}
 
-    const response = await fetch(url);
+Usage:
+  node webscraper.js <URL> <option>
 
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2" });
+Options:
+  --html      - Scrape and print raw HTML of the page
+  --links     - Extract all hyperlinks from the page
+  --images    - Download or list image sources from the page
+  --emails    - Extract any visible email addresses
+  --games     - Get latest/upcoming games (ignores <URL>)
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+Example:
+  node webscraper.js https://example.com --links
+  node webscraper.js https://ign.com --games
 
-    const html = await response.text();
-    const $ = cheerio.load(html);
-
-    //  Extract all links
-    const links = new Set();
-    $("a").each((_, element) => {
-      const href = $(element).attr("href");
-      if (href && !href.startsWith("#")) {
-        try {
-          const absoluteLink = new URL(href, url).href;
-          links.add(absoluteLink);
-        } catch (e) {
-          console.error("Invalid link:", href);
-        }
-      }
-    });
-
-    console.log(" Links found:");
-    console.log([...links]);
-
-    //  Extract all images
-    for (const link of links) {
-      try {
-        await page.goto(link, { waitUntil: "networkidle2" });
-
-        const images = await page.evaluate(() => {
-          const results = new Set();
-
-          document.querySelectorAll("img").forEach((img) => {
-            const src = img.getAttribute("src");
-            const dataSrc = img.getAttribute("data-src");
-            const srcset = img.getAttribute("srcset");
-
-            if (src) results.add(src);
-            if (dataSrc) results.add(dataSrc);
-            if (srcset) {
-              const bestSrc = srcset.split(",")[0].trim().split(" ")[0];
-              if (bestSrc) results.add(bestSrc);
-            }
-          });
-
-          return [...results];
-        });
-
-        if (images.length) {
-          console.log(`🔗 ${link}`);
-          images.forEach((img) => console.log(`📷 ${new URL(img, link).href}`));
-          console.log("---");
-        }
-      } catch (err) {
-        console.error(`❌ Error scraping ${link}:`, err.message);
-      }
-    }
-    await browser.close();
-  } catch (error) {
-    console.error("Error scraping website:", error);
+  `);
+  process.exit(1);
   }
+  
 }
 
 scrapeWebsite();
