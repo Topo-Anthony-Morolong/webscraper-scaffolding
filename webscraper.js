@@ -12,11 +12,10 @@ if (!url || !option) {
   process.exit(1);
 }
 
-
 async function scrapeWebsite() {
    
   switch (option) {
-    
+
     case '--html':
       console.log(`Scraping HTML from: ${url}`);
       await scrapeHtml(url);
