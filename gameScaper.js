@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const API_KEY = process.env.API_KEY;
-console.log("API Key:", API_KEY);
+
 
 // Get today's date
 const today = new Date().toISOString().split("T")[0];
