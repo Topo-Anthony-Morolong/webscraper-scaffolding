@@ -14,7 +14,7 @@ const sixMonthsLater = new Date();
 sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
 const futureDate = sixMonthsLater.toISOString().split("T")[0];
 
-async function getUpcomingGames() {
+export async function getUpcomingGames() {
     const url = `https://api.rawg.io/api/games?key=${API_KEY}&dates=${today},${futureDate}&ordering=released&page_size=10`;
 
     try {
@@ -35,5 +35,4 @@ async function getUpcomingGames() {
         console.error("Error fetching upcoming games:", error.message);
     }
 }
-
-getUpcomingGames();
+ getUpcomingGames();
