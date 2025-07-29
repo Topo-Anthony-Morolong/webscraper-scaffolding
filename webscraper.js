@@ -1,41 +1,48 @@
-
-import { scrapeHtml } from './scrape-Html.js';
-import { scrapeLinks } from './scrape-links.js';  
-import { scrapeImages } from './scrape-images.js';
+import { scrapeHtml } from "./scrape-Html.js";
+import { scrapeLinks } from "./scrape-links.js";
+import { scrapeImages } from "./scrape-images.js";
+import { scrapeEmailList } from "./email_scraper/email-scraper.js";
+import { getUpcomingGames } from "./scrape-games.js"
 
 const args = process.argv.slice(2);
 const url = args[0];
 const option = args[1];
 
 if (!url || !option) {
-  console.error('Usage: node webscraper.js <URL> <--option>');
+  console.error("Usage: node webscraper.js <URL> <--option>");
   process.exit(1);
 }
 
 async function scrapeWebsite() {
-   
   switch (option) {
 
-    case '--html':
+    case "--html":
       console.log(`Scraping HTML from: ${url}`);
       await scrapeHtml(url);
       break;
-    case '--links': 
+
+    case "--links":
       console.log(`Scraping Links from: ${url}`);
       console.log(await scrapeLinks(url));
-        break;
-    case '--images':
+      break;
+
+    case "--images":
       console.log(`Scraping Images from: ${url}`);
       await scrapeImages(url);
-      break;  
-    case '--emails':
-      //call the scrapeEmails function
       break;
-    case '--games':
-      //call the scrapeGames function
-      break;  
+
+    case "--emails":
+      console.log("Running Email Scraper");
+      await scrapeEmailList();
+      break;
+
+    case "--games":
+      console.log("Running game Scraper");
+      await getUpcomingGames();
+      break;
+
     default:
-       console.error(`
+      console.error(`
  option: ${option}
 
 Usage:
@@ -53,9 +60,8 @@ Example:
   node webscraper.js https://ign.com --games
 
   `);
-  process.exit(1);
+      process.exit(1);
   }
-  
 }
 
 scrapeWebsite();
