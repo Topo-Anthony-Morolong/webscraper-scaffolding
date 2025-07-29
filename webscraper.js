@@ -38,7 +38,7 @@ async function scrapeWebsite() {
 
     case "--games":
       console.log("Running game Scraper");
-      await getUpcomingGames(url);
+      await getUpcomingGames();
       break;
 
     default:
