@@ -1,38 +1,126 @@
-import fetch from "node-fetch";
-import dotenv from "dotenv";
+import puppeteer from "puppeteer";
+import puppeteerExtra from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
-dotenv.config();
+// Enable stealth mode to bypass anti-bot systems like Cloudflare
+puppeteerExtra.use(StealthPlugin());
 
-const API_KEY = process.env.API_KEY;
+
+const IGDB_COMING_SOON = "https://www.igdb.com/games/coming_soon";
+
+// Main scraping function
+async function fetchUpcomingGames() {
+
+  const browser = await puppeteerExtra.launch({
+    headless: false,
+    slowMo: 30,
+  });
+
+  const tab = await browser.newPage();
+
+  try {
+
+    await tab.goto(IGDB_COMING_SOON, {
+      waitUntil: "domcontentloaded",
+      timeout: 60000,
+    });
 
 
-// Get today's date
-const today = new Date().toISOString().split("T")[0];
+    await tab.waitForSelector(".media");
 
-// Set a future date (e.g., 6 months ahead)
-const sixMonthsLater = new Date();
-sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
-const futureDate = sixMonthsLater.toISOString().split("T")[0];
+    // Extract game links and images
+    const previews = await tab.$$eval(".media", (nodes) =>
+      nodes.map((node) => {
+        const link = node.querySelector(".media-body a");
+        const image = node.querySelector(".media-left img");
+        return {
+          gameUrl: link?.href || "",
+          profileImage: image?.src || "",
+        };
+      })
+    );
 
-export async function getUpcomingGames() {
-    const url = `https://api.rawg.io/api/games?key=${API_KEY}&dates=${today},${futureDate}&ordering=released&page_size=10`;
+    const results = [];
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
+    // Loop through the first 20 game previews using for...of with entries
+    for (const [index, { gameUrl, profileImage }] of previews.slice(0, 20).entries()) {
+      console.log(`\nScraping game ${index + 1}: ${gameUrl}`);
 
-        const games = data.results.map((game) => ({
-            name: game.name,
-            release_date: game.released,
-            genres: game.genres.map((g) => g.name),
-            platforms: game.platforms?.map((p) => p.platform.name),
-            image: game.background_image,
-        }));
+      // Navigate to the game's detail page
+      await tab.goto(gameUrl, {
+        waitUntil: "networkidle2",
+        timeout: 60000,
+      });
 
-        console.log("Upcoming Games:");
-        console.log(games);
-    } catch (error) {
-        console.error("Error fetching upcoming games:", error.message);
+
+      await tab.waitForSelector("h1");
+
+      // Extract the game name/title
+      const gameName = await tab.$eval("h1", (el) => el.textContent.trim());
+
+      // Extract tags (genres and platforms)
+      const tags = await tab.$$eval(
+        ".MuiTypography-body1 > a",
+        (links) => links.map((el) => el.textContent.trim())
+      );
+
+
+      const genres = tags.slice(0, -1);
+      const platforms = tags.slice(-1);
+
+      // release date
+      const releaseDate = await tab.$$eval("p", (paragraphs) => {
+        const line = paragraphs.find((p) =>
+          p.textContent.toLowerCase().includes("release date")
+        );
+        return line ? line.textContent.split(":").slice(1).join(":").trim() : "Unknown";
+      });
+
+      // publishers
+      const publishers = await tab.$$eval("p", (nodes) => {
+        const pub = nodes.find((p) =>
+          p.textContent.toLowerCase().startsWith("publishers:")
+        );
+        return pub
+          ? Array.from(pub.querySelectorAll("a")).map((a) => a.textContent.trim())
+          : [];
+      });
+
+      //get trailer links
+      const trailerLink = await tab.$$eval("iframe", (frames) => {
+        const yt = frames.find((f) => f.src.includes("youtube") || f.src.includes("trailer"));
+        return yt?.src || "Not available";
+      });
+
+      // Combine all data into a single object
+      const gameInfo = {
+        gameName,
+        genres,
+        platforms,
+        releaseDate,
+        publishers,
+        profileImage,
+        trailerLink,
+        gameUrl,
+      };
+
+
+      console.log(JSON.stringify(gameInfo, null, 2));
+
+
     }
+
+
+    console.log(`\nScraping complete. Total games scraped: ${results.length}`);
+  } catch (err) {
+
+    console.error("Scraping failed:", err.message);
+  } finally {
+
+    await browser.close();
+  }
 }
- getUpcomingGames();
+
+
+fetchUpcomingGames();
+
