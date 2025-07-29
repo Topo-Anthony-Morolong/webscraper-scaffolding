@@ -42,11 +42,11 @@ async function fetchUpcomingGames() {
 
     const results = [];
 
-    // Loop through the first 20 game previews using for...of with entries
+
     for (const [index, { gameUrl, profileImage }] of previews.slice(0, 20).entries()) {
       console.log(`\nScraping game ${index + 1}: ${gameUrl}`);
 
-      // Navigate to the game's detail page
+
       await tab.goto(gameUrl, {
         waitUntil: "networkidle2",
         timeout: 60000,
