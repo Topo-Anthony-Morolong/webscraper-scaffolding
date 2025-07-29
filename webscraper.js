@@ -2,6 +2,7 @@ import { scrapeHtml } from "./scrape-Html.js";
 import { scrapeLinks } from "./scrape-links.js";
 import { scrapeImages } from "./scrape-images.js";
 import { scrapeEmailList } from "./email_scraper/email-scraper.js";
+import { getUpcomingGames } from "./scrape-games.js"
 
 const args = process.argv.slice(2);
 const url = args[0];
@@ -14,25 +15,32 @@ if (!url || !option) {
 
 async function scrapeWebsite() {
   switch (option) {
+
     case "--html":
       console.log(`Scraping HTML from: ${url}`);
       await scrapeHtml(url);
       break;
+
     case "--links":
       console.log(`Scraping Links from: ${url}`);
       console.log(await scrapeLinks(url));
       break;
+
     case "--images":
       console.log(`Scraping Images from: ${url}`);
       await scrapeImages(url);
       break;
+
     case "--emails":
       console.log("Running Email Scraper");
       await scrapeEmailList();
       break;
+
     case "--games":
-      //call the scrapeGames function
+      console.log("Running game Scraper");
+      await getUpcomingGames(url);
       break;
+
     default:
       console.error(`
  option: ${option}
