@@ -1,2 +1,4 @@
 node_modules/
 email_scraper/brokers_data.json
+.env
+
